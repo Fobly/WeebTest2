@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment - Bright Smile Dental Clinic</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-tooth"></i>
+            <span>Bright Smile Dental</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="booking.html" class="booking-link">Book Appointment</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <header class="page-header">
+            <h1>Book Your Appointment</h1>
+            <p>Schedule your visit with our experienced dental team</p>
+        </header>
+
+        <section class="booking-section">
+            <div class="booking-container">
+                <div class="booking-form-card">
+                    <h2>Appointment Details</h2>
+                    <form id="booking-form" class="booking-form">
+                        <div class="form-group">
+                            <label for="patient-type">Patient Type</label>
+                            <select id="patient-type" name="patient-type" required>
+                                <option value="">Select patient type</option>
+                                <option value="new">New Patient</option>
+                                <option value="existing">Existing Patient</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">First Name</label>
+                                <input type="text" id="first-name" name="first-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">Last Name</label>
+                                <input type="text" id="last-name" name="last-name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service">Service Required</label>
+                            <select id="service" name="service" required>
+                                <option value="">Select a service</option>
+                                <option value="general-checkup">General Check-up</option>
+                                <option value="cleaning">Professional Cleaning</option>
+                                <option value="cosmetic">Cosmetic Dentistry</option>
+                                <option value="orthodontics">Orthodontics</option>
+                                <option value="implants">Dental Implants</option>
+                                <option value="emergency">Emergency Care</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="preferred-date">Preferred Date</label>
+                                <input type="date" id="preferred-date" name="preferred-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="preferred-time">Preferred Time</label>
+                                <select id="preferred-time" name="preferred-time" required>
+                                    <option value="">Select time</option>
+                                    <option value="morning">Morning (9:00 AM - 12:00 PM)</option>
+                                    <option value="afternoon">Afternoon (1:00 PM - 4:00 PM)</option>
+                                    <option value="evening">Evening (4:00 PM - 6:00 PM)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Additional Notes</label>
+                            <textarea id="notes" name="notes" rows="4" placeholder="Please mention any specific concerns or requirements"></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-button">Schedule Appointment</button>
+                    </form>
+                </div>
+
+                <div class="booking-info">
+                    <div class="info-card">
+                        <h3>What to Expect</h3>
+                        <ul class="info-list">
+                            <li><i class="fas fa-check"></i> Confirmation email with appointment details</li>
+                            <li><i class="fas fa-check"></i> Reminder 24 hours before appointment</li>
+                            <li><i class="fas fa-check"></i> Initial consultation and examination</li>
+                            <li><i class="fas fa-check"></i> Treatment plan discussion</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>New Patient?</h3>
+                        <p>Please arrive 15 minutes early to complete necessary paperwork. You can also download and fill out the forms in advance:</p>
+                        <a href="#" class="download-link"><i class="fas fa-download"></i> New Patient Forms</a>
+                    </div>
+
+                    <div class="info-card emergency-info">
+                        <h3>Emergency?</h3>
+                        <p>If you're experiencing a dental emergency, please call our emergency hotline:</p>
+                        <a href="tel:+12345678911" class="emergency-button">
+                            <i class="fas fa-phone"></i>
+                            +1 234 567 8911
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Opening Hours</h3>
+                <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                <p>Saturday: 9:00 AM - 2:00 PM</p>
+                <p>Sunday: Closed</p>
+            </div>
+            <div class="footer-section">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Bright Smile Dental Clinic. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
