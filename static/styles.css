@@ -94,7 +94,7 @@ body {
 }
 
 .hero-content p {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 .cta-button {
@@ -120,7 +120,7 @@ body {
     justify-content: center;
     text-align: center;
     color: var(--black);
-    padding: 0 1rem;
+    padding: 3rem 5%;
 }
 
 .hero-content h1 {
@@ -129,7 +129,7 @@ body {
 }
 
 .cta-section p {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 /* Services section */

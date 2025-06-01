@@ -1,14 +1,12 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory, render_template
+from flask import Flask, render_template, request, jsonify, send_from_directory, url_for
 import os
 from datetime import datetime
 import json
 
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__)
 dir_path = os.path.dirname(os.path.abspath(__file__))+'/data/users/'
 
 
-# Configure static files directory
-app.static_folder = '.'
 
 # Store appointments and contact messages (in a real app, you'd use a database)
 appointments = []
@@ -18,7 +16,7 @@ contact_messages = []
 def home():
     return render_template('index.html')
 
-@app.route('/<path:filename>')
+@app.route('/<filename>')
 def serve_static(filename):
     return render_template(filename)
 
