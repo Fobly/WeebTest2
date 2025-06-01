@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, render_template
 import os
 from datetime import datetime
 import json
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 dir_path = os.path.dirname(os.path.abspath(__file__))+'/data/users/'
 
 
@@ -16,11 +16,11 @@ contact_messages = []
 
 @app.route('/')
 def home():
-    return send_from_directory('.', 'index.html')
+    return render_template('index.html')
 
 @app.route('/<path:filename>')
 def serve_static(filename):
-    return send_from_directory('.', filename)
+    return render_template(filename)
 
 @app.route('/api/book-appointment', methods=['POST'])
 def book_appointment():

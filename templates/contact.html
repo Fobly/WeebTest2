@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Контакты - Стоматологическая клиника Bright Smile</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-tooth"></i>
+            <span>Bright Smile Dental</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="services.html">Услуги</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+            <li><a href="booking.html" class="booking-link">Записаться</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <header class="page-header">
+            <h1>Контакты</h1>
+            <p>Мы здесь, чтобы помочь вам с любыми вопросами</p>
+        </header>
+
+        <section class="contact-section">
+            <div class="contact-grid">
+                <div class="contact-info-card">
+                    <div class="contact-details">
+                        <h2>Свяжитесь с нами</h2>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h3>Адрес</h3>
+                                <p>ул. Зубная, 123</p>
+                                <p>Город, Область 12345</p>
+                                <p>Страна</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h3>Телефоны</h3>
+                                <p>Основной: +1 234 567 8900</p>
+                                <p>Экстренный: +1 234 567 8911</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h3>Email</h3>
+                                <p>info@brightsmile.com</p>
+                                <p>appointments@brightsmile.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h3>Часы работы</h3>
+                                <p>Понедельник - Пятница: 9:00 - 18:00</p>
+                                <p>Суббота: 9:00 - 14:00</p>
+                                <p>Воскресенье: Выходной</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="contact-form-card">
+                    <h2>Написать нам</h2>
+                    <form id="contact-form" class="contact-form">
+                        <div class="form-group">
+                            <label for="name">ФИО</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Телефон</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Тема</label>
+                            <select id="subject" name="subject" required>
+                                <option value="">Выберите тему</option>
+                                <option value="appointment">Запись на прием</option>
+                                <option value="general">Общий вопрос</option>
+                                <option value="feedback">Отзыв</option>
+                                <option value="other">Другое</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Сообщение</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-button">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section class="map-section">
+            <h2>Как нас найти</h2>
+            <div class="map-container">
+                <!-- Заменить на реальный код карты -->
+                <div class="map-placeholder">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <p>Интерактивная карта скоро появится</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="emergency-section">
+            <div class="emergency-content">
+                <h2>Срочная помощь?</h2>
+                <p>Не ждите! Немедленно позвоните по экстренному номеру:</p>
+                <a href="tel:+12345678911" class="emergency-button">
+                    <i class="fas fa-phone"></i>
+                    +1 234 567 8911
+                </a>
+                <p class="emergency-note">Доступно 24/7 для неотложной помощи</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Часы работы</h3>
+                <p>Понедельник - Пятница: 9:00 - 18:00</p>
+                <p>Суббота: 9:00 - 14:00</p>
+                <p>Воскресенье: Выходной</p>
+            </div>
+            <div class="footer-section">
+                <h3>Мы в соцсетях</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Стоматологическая клиника Bright Smile. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

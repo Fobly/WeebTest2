@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запись на прием - Стоматология Bright Smile</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-tooth"></i>
+            <span>Bright Smile Dental</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Главная</a></li>
+            <li><a href="services.html">Услуги</a></li>
+            <li><a href="about.html">О нас</a></li>
+            <li><a href="contact.html">Контакты</a></li>
+            <li><a href="booking.html" class="booking-link">Записаться на прием</a></li>
+        </ul>
+        <div class="hamburger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </nav>
+
+    <main class="page-content">
+        <header class="page-header">
+            <h1>Запись на прием</h1>
+            <p>Запланируйте визит к нашей опытной стоматологической команде</p>
+        </header>
+
+        <section class="booking-section">
+            <div class="booking-container">
+                <div class="booking-form-card">
+                    <h2>Детали записи</h2>
+                    <form id="booking-form" class="booking-form">
+                        <div class="form-group">
+                            <label for="patient-type">Тип пациента</label>
+                            <select id="patient-type" name="patient-type" required>
+                                <option value="">Выберите тип пациента</option>
+                                <option value="new">Новый пациент</option>
+                                <option value="existing">Постоянный пациент</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">Имя</label>
+                                <input type="text" id="first-name" name="first-name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">Фамилия</label>
+                                <input type="text" id="last-name" name="last-name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Телефон</label>
+                                <input type="tel" id="phone" name="phone" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="service">Услуга</label>
+                            <select id="service" name="service" required>
+                                <option value="">Выберите услугу</option>
+                                <option value="general-checkup">Общий осмотр</option>
+                                <option value="cleaning">Профессиональная чистка</option>
+                                <option value="cosmetic">Косметическая стоматология</option>
+                                <option value="orthodontics">Ортодонтия</option>
+                                <option value="implants">Зубные импланты</option>
+                                <option value="emergency">Неотложная помощь</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="preferred-date">Предпочтительная дата</label>
+                                <input type="date" id="preferred-date" name="preferred-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="preferred-time">Предпочтительное время</label>
+                                <select id="preferred-time" name="preferred-time" required>
+                                    <option value="">Выберите время</option>
+                                    <option value="morning">Утро (9:00 - 12:00)</option>
+                                    <option value="afternoon">День (13:00 - 16:00)</option>
+                                    <option value="evening">Вечер (16:00 - 18:00)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Дополнительные заметки</label>
+                            <textarea id="notes" name="notes" rows="4" placeholder="Укажите любые особые пожелания или требования"></textarea>
+                        </div>
+
+                        <button type="submit" class="submit-button">Записаться</button>
+                    </form>
+                </div>
+
+                <div class="booking-info">
+                    <div class="info-card">
+                        <h3>Что вас ждет</h3>
+                        <ul class="info-list">
+                            <li><i class="fas fa-check"></i> Подтверждение записи по email</li>
+                            <li><i class="fas fa-check"></i> Напоминание за 24 часа до приема</li>
+                            <li><i class="fas fa-check"></i> Первичная консультация и осмотр</li>
+                            <li><i class="fas fa-check"></i> Обсуждение плана лечения</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Новый пациент?</h3>
+                        <p>Пожалуйста, придите на 15 минут раньше для заполнения необходимых документов. Вы также можете скачать и заполнить формы заранее:</p>
+                        <a href="#" class="download-link"><i class="fas fa-download"></i> Формы для новых пациентов</a>
+                    </div>
+
+                    <div class="info-card emergency-info">
+                        <h3>Экстренный случай?</h3>
+                        <p>Если у вас неотложная стоматологическая ситуация, позвоните на нашу горячую линию:</p>
+                        <a href="tel:+12345678911" class="emergency-button">
+                            <i class="fas fa-phone"></i>
+                            +1 234 567 8911
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Часы работы</h3>
+                <p>Пн-Пт: 9:00 - 18:00</p>
+                <p>Сб: 9:00 - 14:00</p>
+                <p>Вс: Выходной</p>
+            </div>
+            <div class="footer-section">
+                <h3>Мы в соцсетях</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Стоматология Bright Smile. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
