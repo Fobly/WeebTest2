@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}История болезни - Bright Smile{% endblock %}
+
+{% block content %}
+<section class="page-content">
+    <div class="page-header">
+        <h1>История болезни</h1>
+    </div>
+
+    <div class="medical-history-container">
+        {% if history %}
+            <div class="medical-records">
+                {% for record in history %}
+                    <div class="medical-record">
+                        <div class="record-header">
+                            <h3>{{ record.diagnosis }}</h3>
+                            <span class="record-date">{{ record.date }}</span>
+                        </div>
+                        <div class="record-details">
+                            {% if record.symptoms %}
+                                <div class="detail-group">
+                                    <h4>Симптомы</h4>
+                                    <p>{{ record.symptoms }}</p>
+                                </div>
+                            {% endif %}
+                            {% if record.treatment %}
+                                <div class="detail-group">
+                                    <h4>Лечение</h4>
+                                    <p>{{ record.treatment }}</p>
+                                </div>
+                            {% endif %}
+                            {% if record.prescriptions %}
+                                <div class="detail-group">
+                                    <h4>Назначения</h4>
+                                    <ul class="prescriptions-list">
+                                        {% for prescription in record.prescriptions %}
+                                            <li>{{ prescription }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            {% endif %}
+                            {% if record.notes %}
+                                <div class="detail-group">
+                                    <h4>Примечания</h4>
+                                    <p>{{ record.notes }}</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-records">
+                <i class="fas fa-notes-medical"></i>
+                <h3>История болезни пуста</h3>
+                <p>Здесь будет отображаться ваша история лечения</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+.medical-history-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.medical-records {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.medical-record {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.record-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.record-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.record-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.record-details {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.detail-group h4 {
+    color: var(--primary-color);
+    margin: 0 0 0.5rem 0;
+}
+
+.detail-group p {
+    margin: 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+.prescriptions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.prescriptions-list li {
+    padding: 0.5rem 0;
+    color: #666;
+    border-bottom: 1px solid #eee;
+}
+
+.prescriptions-list li:last-child {
+    border-bottom: none;
+}
+
+.no-records {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.no-records i {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.no-records h3 {
+    margin: 1rem 0;
+    color: #666;
+}
+
+.no-records p {
+    color: #888;
+}
+</style>
+{% endblock %} 

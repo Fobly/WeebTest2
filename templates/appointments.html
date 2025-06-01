@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Мои записи - Bright Smile{% endblock %}
+
+{% block content %}
+<section class="page-content">
+    <div class="page-header">
+        <h1>Мои записи</h1>
+        <a href="{{ url_for('booking') }}" class="cta-button">Записаться на приём</a>
+    </div>
+
+    <div class="appointments-container">
+        {% if appointments %}
+            <div class="appointments-list">
+                {% for appointment in appointments %}
+                    <div class="appointment-card">
+                        <div class="appointment-header">
+                            <h3>{{ appointment.service }}</h3>
+                            <span class="status {{ appointment.status }}">{{ appointment.status }}</span>
+                        </div>
+                        <div class="appointment-details">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>{{ appointment.date.strftime('%d.%m.%Y') }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-clock"></i>
+                                <span>{{ appointment.date.strftime('%H:%M') }}</span>
+                            </div>
+                            {% if appointment.notes %}
+                                <div class="detail-item">
+                                    <i class="fas fa-sticky-note"></i>
+                                    <span>{{ appointment.notes }}</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-appointments">
+                <i class="fas fa-calendar-times"></i>
+                <h3>У вас пока нет записей</h3>
+                <p>Запишитесь на приём прямо сейчас!</p>
+                <a href="{{ url_for('booking') }}" class="cta-button">Записаться</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<style>
+.appointments-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.appointments-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.appointment-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.appointment-header h3 {
+    margin: 0;
+    color: #333;
+}
+
+.status {
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.status.scheduled {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.status.completed {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status.cancelled {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.appointment-details {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    color: #666;
+}
+
+.detail-item i {
+    color: var(--primary-color);
+    width: 20px;
+}
+
+.no-appointments {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.no-appointments i {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+.no-appointments h3 {
+    margin: 1rem 0;
+    color: #666;
+}
+
+.no-appointments p {
+    color: #888;
+    margin-bottom: 1.5rem;
+}
+</style>
+{% endblock %} 

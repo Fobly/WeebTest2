@@ -1,140 +1,90 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Стоматология Bright Smile</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='styles.css')}}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="logo">
+{% extends "base.html" %}
+
+{% block title %}Главная - Bright Smile{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <h1>Добро пожаловать в стоматологию Bright Smile</h1>
+        <p>Ваш путь к идеальной улыбке начинается здесь</p>
+        <a href="{{ url_for('booking') }}" class="cta-button">Записаться на приём</a>
+    </div>
+</section>
+
+<section id="services" class="services">
+    <h2>Наши услуги</h2>
+    <div class="services-grid">
+        <div class="service-card">
+            <i class="fas fa-teeth"></i>
+            <h3>Терапевтическая стоматология</h3>
+            <p>Комплексное лечение для всей семьи</p>
+        </div>
+        <div class="service-card">
             <i class="fas fa-tooth"></i>
-            <span>Bright Smile Dental</span>
+            <h3>Эстетическая стоматология</h3>
+            <p>Преобразите свою улыбку с нашими процедурами</p>
         </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Главная</a></li>
-            <li><a href="services.html">Услуги</a></li>
-            <li><a href="about.html">О нас</a></li>
-            <li><a href="contact.html">Контакты</a></li>
-            <li><a href="booking.html" class="booking-link">Запись на приём</a></li>
-        </ul>
-        <div class="hamburger">
-            <span></span>
-            <span></span>
-            <span></span>
+        <div class="service-card">
+            <i class="fas fa-x-ray"></i>
+            <h3>Дентальная имплантация</h3>
+            <p>Восстановите естественную улыбку с имплантами</p>
         </div>
-    </nav>
+        <div class="service-card">
+            <i class="fas fa-teeth-open"></i>
+            <h3>Ортодонтия</h3>
+            <p>Выравнивание зубов для уверенной улыбки</p>
+        </div>
+    </div>
+</section>
 
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1>Добро пожаловать в стоматологию Bright Smile</h1>
-            <p>Ваш путь к идеальной улыбке начинается здесь</p>
-            <a href="booking.html" class="cta-button">Записаться на приём</a>
+<section id="about" class="about">
+    <h2>О нашей клинике</h2>
+    <div class="about-content">
+        <div class="about-text">
+            <p>С более чем 20-летним опытом наша команда профессионалов стремится обеспечить высочайшее качество стоматологической помощи в комфортной и дружелюбной атмосфере.</p>
+            <p>Мы используем новейшие технологии и методики для достижения наилучших результатов для наших пациентов.</p>
         </div>
-    </section>
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-number">20+</span>
+                <span class="stat-label">Лет опыта</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">10k+</span>
+                <span class="stat-label">Довольных пациентов</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">15</span>
+                <span class="stat-label">Опытных врачей</span>
+            </div>
+        </div>
+    </div>
+</section>
 
-    <section id="services" class="services">
-        <h2>Наши услуги</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <i class="fas fa-teeth"></i>
-                <h3>Терапевтическая стоматология</h3>
-                <p>Комплексное лечение для всей семьи</p>
+<section id="contact" class="contact">
+    <h2>Свяжитесь с нами</h2>
+    <div class="contact-container">
+        <form id="contact-form" class="contact-form">
+            <input type="text" placeholder="Ваше имя" required>
+            <input type="email" placeholder="Ваш Email" required>
+            <input type="tel" placeholder="Номер телефона">
+            <textarea placeholder="Ваше сообщение" required></textarea>
+            <button type="submit" class="submit-button">Отправить сообщение</button>
+        </form>
+        <div class="contact-info">
+            <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <p>ул. Стоматологическая, 123, Город, Страна</p>
             </div>
-            <div class="service-card">
-                <i class="fas fa-tooth"></i>
-                <h3>Эстетическая стоматология</h3>
-                <p>Преобразите свою улыбку с нашими процедурами</p>
+            <div class="info-item">
+                <i class="fas fa-phone"></i>
+                <p>+1 234 567 8900</p>
             </div>
-            <div class="service-card">
-                <i class="fas fa-x-ray"></i>
-                <h3>Дентальная имплантация</h3>
-                <p>Восстановите естественную улыбку с имплантами</p>
-            </div>
-            <div class="service-card">
-                <i class="fas fa-teeth-open"></i>
-                <h3>Ортодонтия</h3>
-                <p>Выравнивание зубов для уверенной улыбки</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="about" class="about">
-        <h2>О нашей клинике</h2>
-        <div class="about-content">
-            <div class="about-text">
-                <p>С более чем 20-летним опытом наша команда профессионалов стремится обеспечить высочайшее качество стоматологической помощи в комфортной и дружелюбной атмосфере.</p>
-                <p>Мы используем новейшие технологии и методики для достижения наилучших результатов для наших пациентов.</p>
-            </div>
-            <div class="stats">
-                <div class="stat-item">
-                    <span class="stat-number">20+</span>
-                    <span class="stat-label">Лет опыта</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">10k+</span>
-                    <span class="stat-label">Довольных пациентов</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">15</span>
-                    <span class="stat-label">Опытных врачей</span>
-                </div>
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <p>info@brightsmile.com</p>
             </div>
         </div>
-    </section>
-
-    <section id="contact" class="contact">
-        <h2>Свяжитесь с нами</h2>
-        <div class="contact-container">
-            <form id="contact-form" class="contact-form">
-                <input type="text" placeholder="Ваше имя" required>
-                <input type="email" placeholder="Ваш Email" required>
-                <input type="tel" placeholder="Номер телефона">
-                <textarea placeholder="Ваше сообщение" required></textarea>
-                <button type="submit" class="submit-button">Отправить сообщение</button>
-            </form>
-            <div class="contact-info">
-                <div class="info-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <p>ул. Стоматологическая, 123, Город, Страна</p>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-phone"></i>
-                    <p>+1 234 567 8900</p>
-                </div>
-                <div class="info-item">
-                    <i class="fas fa-envelope"></i>
-                    <p>info@brightsmile.com</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Часы работы</h3>
-                <p>Пн-Пт: 9:00 - 18:00</p>
-                <p>Сб: 9:00 - 14:00</p>
-                <p>Вс: Выходной</p>
-            </div>
-            <div class="footer-section">
-                <h3>Мы в соцсетях</h3>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Стоматология Bright Smile. Все права защищены.</p>
-        </div>
-    </footer>
-
-    <script src="{{url_for('static', filename='script.js')}}"></script>
-</body>
-</html>
+    </div>
+</section>
+{% endblock %}

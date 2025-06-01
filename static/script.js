@@ -260,4 +260,175 @@ window.addEventListener('scroll', () => {
     if (stats.length > 0 && isInViewport(stats[0])) {
         animateStats();
     }
-}); 
+});
+
+// Login form handling
+const loginForm = document.getElementById('login-form');
+if (loginForm) {
+    // Password visibility toggle
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
+    
+    if (togglePassword && passwordInput) {
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye');
+            this.classList.toggle('fa-eye-slash');
+        });
+    }
+
+    loginForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        clearErrors();
+
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const remember = document.getElementById('remember').checked;
+
+        // Basic validation
+        let hasErrors = false;
+        if (!email) {
+            showError('email', 'Email is required');
+            hasErrors = true;
+        } else if (!validateEmail(email)) {
+            showError('email', 'Please enter a valid email');
+            hasErrors = true;
+        }
+
+        if (!password) {
+            showError('password', 'Password is required');
+            hasErrors = true;
+        }
+
+        if (hasErrors) return;
+
+        // Show loading state
+        const submitButton = loginForm.querySelector('.submit-button');
+        const originalText = submitButton.textContent;
+        submitButton.textContent = 'Logging in...';
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    remember
+                })
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Redirect on success
+                window.location.href = result.redirect;
+            } else {
+                // Show error message
+                showError('password', result.message);
+                submitButton.textContent = originalText;
+                submitButton.disabled = false;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showError('password', 'An error occurred. Please try again.');
+            submitButton.textContent = originalText;
+            submitButton.disabled = false;
+        }
+    });
+}
+
+// Helper functions
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+function showError(fieldId, message) {
+    const errorDiv = document.getElementById(`${fieldId}-error`);
+    if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.classList.add('show');
+    }
+}
+
+function clearErrors() {
+    document.querySelectorAll('.error-message').forEach(error => {
+        error.textContent = '';
+        error.classList.remove('show');
+    });
+}
+
+// Registration form handling
+const registrationForm = document.getElementById('register-form');
+if (registrationForm) {
+    registrationForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        clearErrors();
+        
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+        const birthDate = document.getElementById('birth_date').value;
+        
+        let isValid = true;
+        
+        if (!name) {
+            showError('name', 'Пожалуйста, введите ваше имя');
+            isValid = false;
+        }
+        
+        if (!validateEmail(email)) {
+            showError('email', 'Пожалуйста, введите корректный email');
+            isValid = false;
+        }
+        
+        if (!password) {
+            showError('password', 'Пожалуйста, введите пароль');
+            isValid = false;
+        }
+        
+        if (password !== confirmPassword) {
+            showError('confirm_password', 'Пароли не совпадают');
+            isValid = false;
+        }
+        
+        if (!birthDate) {
+            showError('birth_date', 'Пожалуйста, введите дату рождения');
+            isValid = false;
+        }
+        
+        if (isValid) {
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        birth_date: birthDate
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    window.location.href = data.redirect || '/login';
+                } else {
+                    showError('email', data.message || 'Ошибка регистрации');
+                }
+            } catch (error) {
+                showError('email', 'Произошла ошибка при регистрации');
+            }
+        }
+    });
+} 
