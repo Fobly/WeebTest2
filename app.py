@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 
 app = Flask(__name__)
-dir_path = os.path.dirname(os.path.abspath(__file__))
+dir_path = os.path.dirname(os.path.abspath(__file__))+'/data/users/'
 
 
 # Configure static files directory
@@ -32,7 +32,7 @@ def book_appointment():
         appointments.append(data)
         
         # Save appointments to a JSON file
-        with open('/home/kifa/Desktop/llll/cursor web/appointments.json', 'w') as f:
+        with open(dir_path+'appointments.json', 'w') as f:
             json.dump(appointments, f, indent=2)
         
         return jsonify({
@@ -55,7 +55,7 @@ def contact():
         contact_messages.append(data)
         
         # Save messages to a JSON file
-        with open('/home/kifa/Desktop/llll/cursor web/contact_messages.json', 'w') as f:
+        with open(dir_path+'contact_messages.json', 'w') as f:
             json.dump(contact_messages, f, indent=2)
         
         return jsonify({
@@ -73,15 +73,15 @@ def load_data():
     global appointments, contact_messages
     
     try:
-        if os.path.exists('appointments.json'):
-            with open('appointments.json', 'r') as f:
+        if os.path.exists(dir_path+'appointments.json'):
+            with open(dir_path+'appointments.json', 'r') as f:
                 appointments = json.load(f)
     except:
         appointments = []
     
     try:
-        if os.path.exists('contact_messages.json'):
-            with open('contact_messages.json', 'r') as f:
+        if os.path.exists(dir_path+'contact_messages.json'):
+            with open(dir_path+'contact_messages.json', 'r') as f:
                 contact_messages = json.load(f)
     except:
         contact_messages = []
