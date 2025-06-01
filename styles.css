@@ -93,6 +93,10 @@ body {
     margin-bottom: 1rem;
 }
 
+.hero-content p {
+    margin-bottom: 1rem;
+}
+
 .cta-button {
     background-color: var(--primary-color);
     color: var(--white);
@@ -103,10 +107,29 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 2rem;
+    margin-block-end: 2rem;
+    
 }
 
 .cta-button:hover {
     background-color: var(--secondary-color);
+}
+
+.cta-section {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--black);
+    padding: 0 1rem;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.cta-section p {
+    margin-bottom: 1rem;
 }
 
 /* Services section */
@@ -313,6 +336,7 @@ footer {
 /* Page content styles */
 .page-content {
     padding-top: 80px;
+    margin-block-end: 2rem;
 }
 
 .page-header {
@@ -324,6 +348,10 @@ footer {
 .page-header h1 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+}
+
+.story-content {
+    padding: 3rem 5%;
 }
 
 /* Services page styles */
