@@ -66,7 +66,7 @@ Add the following content:
 ```ini
 [program:mywebsite]
 directory=/var/www/mywebsite
-command=/var/www/mywebsite/venv/bin/gunicorn --workers 4 --bind unix:/var/www/mywebsite/mywebsite.sock wsgi:app
+command=gunicorn --workers 4 --bind unix:/var/www/mywebsite/mywebsite.sock wsgi:app
 user=www-data
 autostart=true
 autorestart=true

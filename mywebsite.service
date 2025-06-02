@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve mywebsite
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/mywebsite
+Environment="PATH=/var/www/mywebsite/venv/bin"
+ExecStart=/var/www/mywebsite/venv/bin/gunicorn --workers 3 --bind unix:mywebsite.sock -m 007 wsgi:app
+
+[Install]
+WantedBy=multi-user.target 

@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, jsonify, send_from_directory,
 import os
 from datetime import datetime, timedelta
 import json
-from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, User, Appointment
 from functools import wraps
 
@@ -33,7 +32,7 @@ with app.app_context():
         test_user = User(
             name='Test User',
             email=test_email,
-            password=generate_password_hash('password123'),
+            password='password123',
             birth_date=datetime.now().date(),
             chat_history=[],
             medical_history=[]
@@ -110,8 +109,8 @@ def login():
         remember = data.get('remember', False)
 
         user = User.query.filter_by(email=email).first()
-
-        if user and check_password_hash(user.password, password):
+        
+        if user and user.password == password:
             session['user_id'] = user.id
             if remember:
                 session.permanent = True
@@ -145,7 +144,7 @@ def register():
             new_user = User(
                 name=name,
                 email=email,
-                password=generate_password_hash(password),
+                password=password,
                 birth_date=datetime.strptime(birth_date, '%Y-%m-%d').date(),
                 chat_history=[],
                 medical_history=[]
