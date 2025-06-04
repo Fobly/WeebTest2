@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+
+{% block title %}Управление пользователями - Bright Smile{% endblock %}
+
+{% block content %}
+<section class="admin-users">
+    <div class="page-header">
+        <h1>Управление пользователями</h1>
+        <div class="header-actions">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Поиск пользователей...">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="users-container">
+        <div class="users-grid">
+            {% for user in users %}
+                <div class="user-card" data-user-id="{{ user.id }}">
+                    <div class="user-header">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-name">
+                            <h3>{{ user.last_name }} {{ user.first_name }}</h3>
+                            <span class="user-email">{{ user.email }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="user-info">
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <span>{{ user.phone }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>{{ user.birth_date.strftime('%d.%m.%Y') }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <span>Регистрация: {{ user.created_at.strftime('%d.%m.%Y') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="user-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">{{ user.appointments|length }}</span>
+                            <span class="stat-label">Записей</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">{{ user.medical_history|length }}</span>
+                            <span class="stat-label">Историй болезни</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">{{ user.chat_history|length }}</span>
+                            <span class="stat-label">Сообщений</span>
+                        </div>
+                    </div>
+
+                    <div class="user-actions">
+                        <button class="btn-edit" onclick="editUser({{ user.id }})">
+                            <i class="fas fa-edit"></i>
+                            Редактировать
+                        </button>
+                        <button class="btn-history" onclick="viewMedicalHistory({{ user.id }})">
+                            <i class="fas fa-notes-medical"></i>
+                            История болезни
+                        </button>
+                        <button class="btn-chat" onclick="openChat({{ user.id }})">
+                            <i class="fas fa-comments"></i>
+                            Чат
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Модальное окно редактирования пользователя -->
+<div id="edit-user-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Редактирование пользователя</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <form id="edit-user-form">
+            <div class="form-group">
+                <label for="edit-first-name">Имя</label>
+                <input type="text" id="edit-first-name" name="first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-last-name">Фамилия</label>
+                <input type="text" id="edit-last-name" name="last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-middle-name">Отчество</label>
+                <input type="text" id="edit-middle-name" name="middle_name">
+            </div>
+            <div class="form-group">
+                <label for="edit-email">Email</label>
+                <input type="email" id="edit-email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-phone">Телефон</label>
+                <input type="tel" id="edit-phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="edit-birth-date">Дата рождения</label>
+                <input type="date" id="edit-birth-date" name="birth_date" required>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-save">Сохранить</button>
+                <button type="button" class="btn-cancel">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.admin-users {
+    padding: 2rem;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.user-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.user-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.user-name h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.user-email {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.user-info {
+    margin: 1rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+}
+
+.user-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.user-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.user-actions button {
+    flex: 1;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.btn-edit {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-history {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-chat {
+    background: #28a745;
+    color: white;
+}
+
+.btn-edit:hover {
+    background: var(--secondary-color);
+}
+
+.btn-history:hover {
+    background: #5a6268;
+}
+
+.btn-chat:hover {
+    background: #218838;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-save,
+.btn-cancel {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-save {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-save:hover {
+    background: var(--secondary-color);
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+}
+
+@media (max-width: 768px) {
+    .admin-users {
+        padding: 1rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+
+    .users-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .user-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .user-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+// Поиск пользователей
+const searchInput = document.getElementById('search-input');
+const userCards = document.querySelectorAll('.user-card');
+
+searchInput.addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    
+    userCards.forEach(card => {
+        const userName = card.querySelector('.user-name h3').textContent.toLowerCase();
+        const userEmail = card.querySelector('.user-email').textContent.toLowerCase();
+        
+        if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+
+// Модальное окно редактирования
+const modal = document.getElementById('edit-user-modal');
+const closeModal = document.querySelector('.close-modal');
+const editForm = document.getElementById('edit-user-form');
+let currentUserId = null;
+
+function editUser(userId) {
+    currentUserId = userId;
+    const userCard = document.querySelector(`[data-user-id="${userId}"]`);
+    
+    // Заполняем форму данными пользователя
+    document.getElementById('edit-first-name').value = userCard.querySelector('.user-name h3').textContent.split(' ')[1];
+    document.getElementById('edit-last-name').value = userCard.querySelector('.user-name h3').textContent.split(' ')[0];
+    document.getElementById('edit-email').value = userCard.querySelector('.user-email').textContent;
+    document.getElementById('edit-phone').value = userCard.querySelector('.info-item:first-child span').textContent;
+    
+    modal.style.display = 'block';
+}
+
+closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+document.querySelector('.btn-cancel').addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+editForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+    
+    try {
+        const response = await fetch(`/api/admin/users/${currentUserId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+            // Обновляем информацию на странице
+            const userCard = document.querySelector(`[data-user-id="${currentUserId}"]`);
+            userCard.querySelector('.user-name h3').textContent = `${data.last_name} ${data.first_name}`;
+            userCard.querySelector('.user-email').textContent = data.email;
+            userCard.querySelector('.info-item:first-child span').textContent = data.phone;
+            
+            modal.style.display = 'none';
+        } else {
+            throw new Error('Failed to update user');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Не удалось обновить данные пользователя');
+    }
+});
+
+function viewMedicalHistory(userId) {
+    window.location.href = `/admin/users/${userId}/medical-history`;
+}
+
+function openChat(userId) {
+    window.location.href = `/admin/chats/${userId}`;
+}
+
+// Закрытие модального окна при клике вне его
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+</script>
+{% endblock %} 

@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}Просмотр записи - Bright Smile{% endblock %}
+
+{% block content %}
+<section class="appointment-details-page">
+    <div class="page-header">
+        <h1>Просмотр записи</h1>
+        <a href="{{ url_for('admin_appointments') }}" class="back-button">
+            <i class="fas fa-arrow-left"></i> Назад к списку
+        </a>
+    </div>
+
+    <div class="appointment-details-container">
+        <div class="details-card">
+            <div class="card-section">
+                <h2>Информация о пациенте</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>ФИО:</label>
+                        <span>{{ appointment.user.last_name }} {{ appointment.user.first_name }} {{ appointment.user.middle_name or '' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Email:</label>
+                        <span>{{ appointment.user.email }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Телефон:</label>
+                        <span>{{ appointment.user.phone }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Дата рождения:</label>
+                        <span>{{ appointment.user.birth_date|format_date }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-section">
+                <h2>Детали записи</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Услуга:</label>
+                        <span>{{ appointment.service.name }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Дата и время:</label>
+                        <span>{{ appointment.date.strftime('%d.%m.%Y %H:%M') }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Статус:</label>
+                        <div class="status-selector">
+                            <select id="status" class="status-select {{ appointment.status }}">
+                                <option value="pending" {% if appointment.status == 'pending' %}selected{% endif %}>Ожидает</option>
+                                <option value="confirmed" {% if appointment.status == 'confirmed' %}selected{% endif %}>Подтверждён</option>
+                                <option value="completed" {% if appointment.status == 'completed' %}selected{% endif %}>Завершён</option>
+                                <option value="cancelled" {% if appointment.status == 'cancelled' %}selected{% endif %}>Отменён</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="info-item full-width">
+                        <label>Примечания:</label>
+                        <textarea id="notes" class="notes-textarea" placeholder="Добавить примечание...">{{ appointment.notes or '' }}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            {% if appointment.user.medical_history %}
+            <div class="card-section">
+                <h2>История болезни</h2>
+                <div class="medical-history">
+                    {% for record in appointment.user.medical_history|reverse %}
+                    <div class="history-item">
+                        <div class="history-header">
+                            <span class="history-date">{{ record.created_at|format_date }}</span>
+                            <span class="history-doctor">{{ record.created_by.first_name }} {{ record.created_by.last_name }}</span>
+                        </div>
+                        <div class="history-content">
+                            <p><strong>Диагноз:</strong> {{ record.diagnosis }}</p>
+                            {% if record.symptoms %}
+                            <p><strong>Симптомы:</strong> {{ record.symptoms }}</p>
+                            {% endif %}
+                            {% if record.treatment %}
+                            <p><strong>Лечение:</strong> {{ record.treatment }}</p>
+                            {% endif %}
+                            {% if record.notes %}
+                            <p><strong>Примечания:</strong> {{ record.notes }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<style>
+.appointment-details-page {
+    padding: 2rem;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.back-button:hover {
+    text-decoration: underline;
+}
+
+.details-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.card-section {
+    padding: 2rem;
+    border-bottom: 1px solid #eee;
+}
+
+.card-section:last-child {
+    border-bottom: none;
+}
+
+.card-section h2 {
+    color: var(--primary-color);
+    margin: 0 0 1.5rem 0;
+    font-size: 1.2rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.info-item.full-width {
+    grid-column: 1 / -1;
+}
+
+.info-item label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.info-item span {
+    font-size: 1rem;
+    color: #333;
+}
+
+.status-select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    width: 100%;
+}
+
+.status-select.pending { color: #f57c00; }
+.status-select.confirmed { color: #1976d2; }
+.status-select.completed { color: #388e3c; }
+.status-select.cancelled { color: #d32f2f; }
+
+.notes-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+    resize: vertical;
+}
+
+.medical-history {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.history-item {
+    background: #f8f9fa;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.history-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.history-content p {
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .appointment-details-page {
+        padding: 1rem;
+    }
+    
+    .card-section {
+        padding: 1rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const statusSelect = document.getElementById('status');
+    const notesTextarea = document.getElementById('notes');
+    let timeoutId;
+
+    // Update status
+    statusSelect.addEventListener('change', function() {
+        fetch(`{{ url_for('update_appointment_status', appointment_id=appointment.id) }}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                status: this.value
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Update the select class
+                statusSelect.className = 'status-select ' + this.value;
+            } else {
+                alert('Ошибка при обновлении статуса');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Ошибка при обновлении статуса');
+        });
+    });
+
+    // Update notes with debouncing
+    notesTextarea.addEventListener('input', function() {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+            fetch(`{{ url_for('update_appointment_notes', appointment_id=appointment.id) }}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    notes: this.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status !== 'success') {
+                    alert('Ошибка при сохранении примечаний');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Ошибка при сохранении примечаний');
+            });
+        }, 500);
+    });
+});
+</script>
+{% endblock %} 

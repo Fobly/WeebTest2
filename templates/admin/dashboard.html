@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block title %}Панель администратора - Bright Smile{% endblock %}
+
+{% block content %}
+<section class="admin-dashboard">
+    <div class="dashboard-header">
+        <h1>Панель администратора</h1>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="dashboard-grid">
+            <!-- Статистика -->
+            <div class="dashboard-card stats">
+                <h2>Статистика</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value">{{ stats.total_users }}</div>
+                        <div class="stat-label">Пользователей</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ stats.appointments_today }}</div>
+                        <div class="stat-label">Записи на сегодня</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">{{ stats.unread_messages }}</div>
+                        <div class="stat-label">Непрочитанных сообщений</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Последние записи -->
+            <div class="dashboard-card appointments">
+                <h2>Последние записи</h2>
+                <div class="appointments-list">
+                    {% for appointment in recent_appointments %}
+                        <div class="appointment-item">
+                            <div class="appointment-info">
+                                <strong>{{ appointment.user.last_name }} {{ appointment.user.first_name }}</strong>
+                                <span>{{ appointment.service.name }}</span>
+                                <span>{{ appointment.date.strftime('%d.%m.%Y %H:%M') }}</span>
+                            </div>
+                            <div class="appointment-actions">
+                                <button class="btn-view" onclick="viewAppointment({{ appointment.id }})">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Непрочитанные сообщения -->
+            <div class="dashboard-card messages">
+                <h2>Непрочитанные сообщения</h2>
+                <div class="messages-list">
+                    {% for message in unread_messages %}
+                        <div class="message-item">
+                            <div class="message-info">
+                                <strong>{{ message.user.last_name }} {{ message.user.first_name }}</strong>
+                                <span class="message-preview">{{ message.content[:50] }}...</span>
+                                <span class="message-time">{{ message.created_at.strftime('%d.%m.%Y %H:%M') }}</span>
+                            </div>
+                            <div class="message-actions">
+                                <button class="btn-chat" onclick="openChat({{ message.user.id }})">
+                                    <i class="fas fa-comments"></i>
+                                </button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    {% if not unread_messages %}
+                        <div class="no-messages">
+                            <i class="fas fa-check-circle"></i>
+                            <p>Нет непрочитанных сообщений</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Быстрые действия -->
+            <div class="dashboard-card actions">
+                <h2>Быстрые действия</h2>
+                <div class="actions-grid">
+                    <a href="{{ url_for('admin_users') }}" class="action-button">
+                        <i class="fas fa-users"></i>
+                        <span>Пользователи</span>
+                    </a>
+                    <a href="{{ url_for('admin_appointments') }}" class="action-button">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Все записи</span>
+                    </a>
+                    <a href="{{ url_for('admin_medical_records') }}" class="action-button">
+                        <i class="fas fa-notes-medical"></i>
+                        <span>Истории болезней</span>
+                    </a>
+                    <a href="{{ url_for('admin_chats') }}" class="action-button">
+                        <i class="fas fa-comments"></i>
+                        <span>Все чаты</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+.admin-dashboard {
+    padding: 2rem;
+}
+
+.dashboard-header {
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h2 {
+    margin: 0 0 1rem 0;
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* Статистика */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Записи и сообщения */
+.appointments-list,
+.messages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.appointment-item,
+.message-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.appointment-info,
+.message-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.appointment-actions,
+.message-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Кнопки */
+.btn-view,
+.btn-chat {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.btn-view:hover,
+.btn-chat:hover {
+    background: rgba(var(--primary-color-rgb), 0.1);
+}
+
+/* Непрочитанные сообщения */
+.message-item {
+    border-left: 3px solid var(--primary-color);
+}
+
+.message-preview {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.message-time {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.no-messages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2rem;
+    text-align: center;
+    color: #666;
+}
+
+.no-messages i {
+    font-size: 2rem;
+    color: #28a745;
+}
+
+.no-messages p {
+    margin: 0;
+}
+
+/* Быстрые действия */
+.actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+.action-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 5px;
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.action-button i {
+    font-size: 1.5rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .admin-dashboard {
+        padding: 1rem;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+
+<script>
+function openChat(userId) {
+    window.location.href = `/admin/chats/${userId}`;
+}
+
+function viewAppointment(id) {
+    window.location.href = `{{ url_for('view_appointment', appointment_id=0) }}`.replace('0', id);
+}
+</script>
+{% endblock %} 

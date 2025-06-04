@@ -139,14 +139,17 @@ if (bookingForm) {
         e.preventDefault();
         
         // Get form data
-        const formData = new FormData(this);
-        const formObject = {};
-        formData.forEach((value, key) => formObject[key] = value);
+        const formData = {
+            service: document.getElementById('service').value,
+            'preferred-date': document.getElementById('preferred-date').value,
+            'preferred-time': document.getElementById('preferred-time').value,
+            notes: document.getElementById('notes').value || ''
+        };
         
         // Show loading state
         const submitButton = bookingForm.querySelector('.submit-button');
         const originalText = submitButton.textContent;
-        submitButton.textContent = 'Scheduling...';
+        submitButton.textContent = 'Отправка...';
         submitButton.disabled = true;
         
         try {
@@ -156,29 +159,26 @@ if (bookingForm) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(formObject)
+                body: JSON.stringify(formData)
             });
             
             const result = await response.json();
             
             if (response.ok) {
                 // Show success message
-                submitButton.textContent = 'Appointment Scheduled!';
+                submitButton.textContent = 'Запись создана!';
                 submitButton.style.backgroundColor = '#28a745';
                 
-                // Reset form after delay
+                // Redirect to appointments page after delay
                 setTimeout(() => {
-                    bookingForm.reset();
-                    submitButton.textContent = originalText;
-                    submitButton.style.backgroundColor = '';
-                    submitButton.disabled = false;
-                }, 3000);
+                    window.location.href = '/appointments';
+                }, 2000);
             } else {
-                throw new Error(result.message || 'Failed to schedule appointment');
+                throw new Error(result.message || 'Не удалось создать запись');
             }
         } catch (error) {
             // Show error message
-            submitButton.textContent = 'Error! Try Again';
+            submitButton.textContent = 'Ошибка! Попробуйте снова';
             submitButton.style.backgroundColor = '#dc3545';
             submitButton.disabled = false;
             
@@ -260,7 +260,7 @@ window.addEventListener('scroll', () => {
     if (stats.length > 0 && isInViewport(stats[0])) {
         animateStats();
     }
-});
+}); 
 
 // Login form handling
 const loginForm = document.getElementById('login-form');
@@ -371,21 +371,34 @@ if (registrationForm) {
         
         clearErrors();
         
-        const name = document.getElementById('name').value;
+        const first_name = document.getElementById('first_name').value;
+        const last_name = document.getElementById('last_name').value;
+        const middle_name = document.getElementById('middle_name').value;
         const email = document.getElementById('email').value;
+        const phone = document.getElementById('phone').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirm_password').value;
         const birthDate = document.getElementById('birth_date').value;
         
         let isValid = true;
         
-        if (!name) {
-            showError('name', 'Пожалуйста, введите ваше имя');
+        if (!first_name) {
+            showError('first_name', 'Пожалуйста, введите ваше имя');
+            isValid = false;
+        }
+        
+        if (!last_name) {
+            showError('last_name', 'Пожалуйста, введите вашу фамилию');
             isValid = false;
         }
         
         if (!validateEmail(email)) {
             showError('email', 'Пожалуйста, введите корректный email');
+            isValid = false;
+        }
+
+        if (!phone) {
+            showError('phone', 'Пожалуйста, введите номер телефона');
             isValid = false;
         }
         
@@ -412,8 +425,11 @@ if (registrationForm) {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        name,
+                        first_name,
+                        last_name,
+                        middle_name,
                         email,
+                        phone,
                         password,
                         birth_date: birthDate
                     })
@@ -428,6 +444,7 @@ if (registrationForm) {
                 }
             } catch (error) {
                 showError('email', 'Произошла ошибка при регистрации');
+                console.error('Error:', error);
             }
         }
     });

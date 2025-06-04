@@ -15,8 +15,39 @@
                 {% for appointment in appointments %}
                     <div class="appointment-card">
                         <div class="appointment-header">
-                            <h3>{{ appointment.service }}</h3>
-                            <span class="status {{ appointment.status }}">{{ appointment.status }}</span>
+                            <div class="service-info">
+                                <h3>{{ appointment.service.name }}</h3>
+                                <div class="service-icon">
+                                    {% if 'осмотр' in appointment.service.name.lower() %}
+                                        <i class="fas fa-tooth"></i>
+                                    {% elif 'чистка' in appointment.service.name.lower() %}
+                                        <i class="fas fa-brush"></i>
+                                    {% elif 'косметическая' in appointment.service.name.lower() %}
+                                        <i class="fas fa-smile"></i>
+                                    {% elif 'ортодонтия' in appointment.service.name.lower() %}
+                                        <i class="fas fa-teeth"></i>
+                                    {% elif 'имплант' in appointment.service.name.lower() %}
+                                        <i class="fas fa-tooth"></i>
+                                    {% elif 'неотложная' in appointment.service.name.lower() %}
+                                        <i class="fas fa-first-aid"></i>
+                                    {% else %}
+                                        <i class="fas fa-tooth"></i>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <span class="status-badge status-{{ appointment.status }}">
+                                {% if appointment.status == 'pending' %}
+                                    Ожидает
+                                {% elif appointment.status == 'confirmed' %}
+                                    Подтверждён
+                                {% elif appointment.status == 'completed' %}
+                                    Завершён
+                                {% elif appointment.status == 'cancelled' %}
+                                    Отменён
+                                {% else %}
+                                    {{ appointment.status }}
+                                {% endif %}
+                            </span>
                         </div>
                         <div class="appointment-details">
                             <div class="detail-item">
@@ -65,6 +96,12 @@
     border-radius: 10px;
     padding: 1.5rem;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.appointment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
 }
 
 .appointment-header {
@@ -76,30 +113,57 @@
     border-bottom: 1px solid #eee;
 }
 
-.appointment-header h3 {
-    margin: 0;
-    color: #333;
+.service-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
-.status {
+.service-info h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2rem;
+}
+
+.service-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+}
+
+.service-icon i {
+    font-size: 1.2rem;
+}
+
+.status-badge {
     padding: 0.5rem 1rem;
     border-radius: 20px;
     font-size: 0.9rem;
     font-weight: 500;
 }
 
-.status.scheduled {
-    background-color: #e3f2fd;
+.status-pending {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.status-confirmed {
+    background: #e3f2fd;
     color: #1976d2;
 }
 
-.status.completed {
-    background-color: #e8f5e9;
+.status-completed {
+    background: #e8f5e9;
     color: #2e7d32;
 }
 
-.status.cancelled {
-    background-color: #ffebee;
+.status-cancelled {
+    background: #ffebee;
     color: #c62828;
 }
 
@@ -142,6 +206,12 @@
 .no-appointments p {
     color: #888;
     margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .appointments-list {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
 }
 </style>
 {% endblock %} 

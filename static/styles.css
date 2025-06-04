@@ -675,7 +675,7 @@ footer {
 .booking-link:hover {
     background-color: var(--secondary-color);
     color: var(--white) !important;
-}
+} 
 
 /* Registration styles */
 .register-section {

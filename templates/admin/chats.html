@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Чаты с пользователями - Bright Smile{% endblock %}
+
+{% block content %}
+<section class="admin-chats">
+    <div class="page-header">
+        <h1>Чаты с пользователями</h1>
+        <div class="header-actions">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="Поиск по имени или email...">
+                <i class="fas fa-search"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="chats-container">
+        <div class="chats-grid">
+            {% for user in users %}
+                <div class="chat-card" data-user-id="{{ user.id }}">
+                    <div class="user-header">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-info">
+                            <h3>{{ user.last_name }} {{ user.first_name }}</h3>
+                            <span class="user-email">{{ user.email }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-preview">
+                        {% if user.chat_history %}
+                            <div class="last-message">
+                                <span class="message-label">Последнее сообщение:</span>
+                                <p>{{ user.chat_history[-1].content[:100] }}...</p>
+                                <span class="message-time">{{ user.chat_history[-1].created_at.strftime('%d.%m.%Y %H:%M') }}</span>
+                            </div>
+                            <div class="message-count">
+                                <span class="count">{{ user.chat_history|length }}</span>
+                                <span class="label">сообщений</span>
+                            </div>
+                        {% else %}
+                            <div class="no-messages">
+                                <i class="fas fa-comments"></i>
+                                <p>Нет сообщений</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="chat-actions">
+                        <button class="btn-chat" onclick="openChat({{ user.id }})">
+                            <i class="fas fa-comments"></i>
+                            Открыть чат
+                        </button>
+                        <button class="btn-history" onclick="viewMedicalHistory({{ user.id }})">
+                            <i class="fas fa-notes-medical"></i>
+                            История болезни
+                        </button>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<style>
+.admin-chats {
+    padding: 2rem;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.search-box {
+    position: relative;
+}
+
+.search-box input {
+    padding: 0.5rem 2.5rem 0.5rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 300px;
+}
+
+.search-box i {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+}
+
+.chats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.chat-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.user-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.user-info h3 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.user-email {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.chat-preview {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 5px;
+}
+
+.last-message {
+    margin-bottom: 1rem;
+}
+
+.message-label {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.last-message p {
+    margin: 0;
+    color: #333;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.message-time {
+    display: block;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+.message-count {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.count {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.label {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.no-messages {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    padding: 1rem;
+}
+
+.no-messages i {
+    font-size: 2rem;
+    color: #ddd;
+}
+
+.chat-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.chat-actions button {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.btn-chat {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-history {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-chat:hover {
+    background: var(--secondary-color);
+}
+
+.btn-history:hover {
+    background: #5a6268;
+}
+
+@media (max-width: 768px) {
+    .admin-chats {
+        padding: 1rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+
+    .chats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .chat-actions {
+        flex-direction: column;
+    }
+}
+</style>
+
+<script>
+// Поиск чатов
+const searchInput = document.getElementById('search-input');
+const chatCards = document.querySelectorAll('.chat-card');
+
+searchInput.addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    
+    chatCards.forEach(card => {
+        const userName = card.querySelector('.user-info h3').textContent.toLowerCase();
+        const userEmail = card.querySelector('.user-email').textContent.toLowerCase();
+        
+        if (userName.includes(searchTerm) || userEmail.includes(searchTerm)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+
+function openChat(userId) {
+    window.location.href = `/admin/chats/${userId}`;
+}
+
+function viewMedicalHistory(userId) {
+    window.location.href = `/admin/users/${userId}/medical-history`;
+}
+</script>
+{% endblock %} 

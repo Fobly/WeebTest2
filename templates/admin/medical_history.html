@@ -1,0 +1,492 @@
+{% extends "base.html" %}
+
+{% block title %}История болезни {{ user.last_name }} {{ user.first_name }} - Bright Smile{% endblock %}
+
+{% block content %}
+<section class="medical-history">
+    <div class="page-header">
+        <div class="header-info">
+            <a href="{{ url_for('admin_users') }}" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="patient-info">
+                <h1>История болезни</h1>
+                <div class="patient-details">
+                    <span class="patient-name">{{ user.last_name }} {{ user.first_name }}</span>
+                    <span class="patient-birth">Дата рождения: {{ user.birth_date.strftime('%d.%m.%Y') }}</span>
+                </div>
+            </div>
+        </div>
+        <button class="btn-add" onclick="openAddRecordModal()">
+            <i class="fas fa-plus"></i>
+            Добавить запись
+        </button>
+    </div>
+
+    <div class="records-timeline">
+        {% if user.medical_history %}
+            {% for record in user.medical_history|sort(attribute='created_at', reverse=true) %}
+                <div class="record-card">
+                    <div class="record-header">
+                        <div class="record-date">
+                            <i class="fas fa-calendar"></i>
+                            {{ record.created_at|format_date }}
+                        </div>
+                        <div class="record-doctor">
+                            <i class="fas fa-user-md"></i>
+                            {{ record.created_by.last_name }} {{ record.created_by.first_name }}
+                        </div>
+                    </div>
+
+                    <div class="record-content">
+                        <div class="record-section">
+                            <h3>Диагноз</h3>
+                            <p>{{ record.diagnosis }}</p>
+                        </div>
+
+                        {% if record.symptoms %}
+                            <div class="record-section">
+                                <h3>Симптомы</h3>
+                                <p>{{ record.symptoms }}</p>
+                            </div>
+                        {% endif %}
+
+                        {% if record.treatment %}
+                            <div class="record-section">
+                                <h3>Лечение</h3>
+                                <p>{{ record.treatment }}</p>
+                            </div>
+                        {% endif %}
+
+                        {% if record.prescriptions %}
+                            <div class="record-section">
+                                <h3>Назначения</h3>
+                                <ul class="prescriptions-list">
+                                    {% for prescription in record.prescriptions %}
+                                        <li>{{ prescription }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if record.notes %}
+                            <div class="record-section">
+                                <h3>Примечания</h3>
+                                <p>{{ record.notes }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-records">
+                <i class="fas fa-notes-medical"></i>
+                <p>У пациента пока нет записей в истории болезни</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Модальное окно добавления записи -->
+<div id="add-record-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Добавить запись</h2>
+            <button class="close-modal">&times;</button>
+        </div>
+        <form id="add-record-form">
+            <div class="form-group">
+                <label for="diagnosis">Диагноз</label>
+                <input type="text" id="diagnosis" name="diagnosis" required>
+            </div>
+            <div class="form-group">
+                <label for="symptoms">Симптомы</label>
+                <textarea id="symptoms" name="symptoms" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="treatment">Лечение</label>
+                <textarea id="treatment" name="treatment" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="prescriptions">Назначения</label>
+                <div class="prescriptions-input">
+                    <div class="prescription-item">
+                        <input type="text" class="prescription-field" placeholder="Введите назначение">
+                        <button type="button" class="btn-add-prescription">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="notes">Примечания</label>
+                <textarea id="notes" name="notes" rows="3"></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-save">Сохранить</button>
+                <button type="button" class="btn-cancel">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.medical-history {
+    padding: 2rem;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.back-button {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+}
+
+.patient-info h1 {
+    margin: 0;
+    color: var(--primary-color);
+}
+
+.patient-details {
+    display: flex;
+    gap: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.btn-add {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background-color 0.3s;
+}
+
+.btn-add:hover {
+    background: var(--secondary-color);
+}
+
+.records-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.record-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.record-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    color: #666;
+}
+
+.record-date,
+.record-doctor {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.record-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.record-section h3 {
+    margin: 0 0 0.5rem 0;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+.record-section p {
+    margin: 0;
+    color: #333;
+}
+
+.prescriptions-list {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: #333;
+}
+
+.no-records {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    color: #666;
+}
+
+.no-records i {
+    font-size: 3rem;
+    color: #ddd;
+    margin-bottom: 1rem;
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    width: 90%;
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    border-radius: 10px;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #666;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: inherit;
+}
+
+.prescriptions-input {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.prescription-item {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.prescription-field {
+    flex: 1;
+}
+
+.btn-add-prescription {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 30px;
+    cursor: pointer;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-save,
+.btn-cancel {
+    flex: 1;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-save {
+    background: var(--primary-color);
+    color: white;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-save:hover {
+    background: var(--secondary-color);
+}
+
+.btn-cancel:hover {
+    background: #5a6268;
+}
+
+@media (max-width: 768px) {
+    .medical-history {
+        padding: 1rem;
+    }
+
+    .page-header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .header-info {
+        width: 100%;
+    }
+
+    .patient-details {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .btn-add {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .record-header {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+</style>
+
+<script>
+const modal = document.getElementById('add-record-modal');
+const closeModal = document.querySelector('.close-modal');
+const addRecordForm = document.getElementById('add-record-form');
+const prescriptionsInput = document.querySelector('.prescriptions-input');
+const btnAddPrescription = document.querySelector('.btn-add-prescription');
+
+function openAddRecordModal() {
+    modal.style.display = 'block';
+}
+
+closeModal.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+document.querySelector('.btn-cancel').addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+// Добавление полей для назначений
+btnAddPrescription.addEventListener('click', () => {
+    const prescriptionItem = document.createElement('div');
+    prescriptionItem.className = 'prescription-item';
+    prescriptionItem.innerHTML = `
+        <input type="text" class="prescription-field" placeholder="Введите назначение">
+        <button type="button" class="btn-remove-prescription">
+            <i class="fas fa-minus"></i>
+        </button>
+    `;
+    prescriptionsInput.appendChild(prescriptionItem);
+
+    // Обработчик удаления поля
+    prescriptionItem.querySelector('.btn-remove-prescription').addEventListener('click', () => {
+        prescriptionItem.remove();
+    });
+});
+
+// Отправка формы
+addRecordForm.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const submitButton = addRecordForm.querySelector('.btn-save');
+    const originalText = submitButton.textContent;
+    submitButton.textContent = 'Сохранение...';
+    submitButton.disabled = true;
+    
+    const prescriptions = Array.from(document.querySelectorAll('.prescription-field'))
+        .map(input => input.value.trim())
+        .filter(value => value);
+    
+    const data = {
+        diagnosis: document.getElementById('diagnosis').value,
+        symptoms: document.getElementById('symptoms').value,
+        treatment: document.getElementById('treatment').value,
+        prescriptions: prescriptions,
+        notes: document.getElementById('notes').value
+    };
+    
+    try {
+        const response = await fetch('/admin/users/{{ user.id }}/medical-history', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok) {
+            // Закрываем модальное окно
+            modal.style.display = 'none';
+            // Перезагружаем страницу для отображения новой записи
+            window.location.reload();
+        } else {
+            throw new Error(result.message || 'Не удалось добавить запись');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Не удалось добавить запись: ' + error.message);
+        submitButton.textContent = originalText;
+        submitButton.disabled = false;
+    }
+});
+
+// Закрытие модального окна при клике вне его
+window.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.style.display = 'none';
+    }
+});
+</script>
+{% endblock %} 
