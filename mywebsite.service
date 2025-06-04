@@ -6,8 +6,11 @@ After=network.target
 User=www-data
 Group=www-data
 WorkingDirectory=/var/www/mywebsite
-Environment="PATH=/var/www/mywebsite/venv/bin"
+Environment="PATH=/var/www/mywebsite/venv/bin:/usr/local/bin:/usr/bin:/bin"
+Environment="PYTHONPATH=/var/www/mywebsite"
+Environment="VIRTUAL_ENV=/var/www/mywebsite/venv"
 ExecStart=/var/www/mywebsite/venv/bin/gunicorn --workers 3 --bind unix:mywebsite.sock -m 007 wsgi:app
+Restart=always
 
 [Install]
 WantedBy=multi-user.target 
